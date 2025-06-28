@@ -1,18 +1,20 @@
-# Departmental Office LAN Design: IP Addressing & Segmentation (Cisco Packet Tracer)
+# Departmental Office LAN Design: IP Addressing, Segmentation, and Secure Remote Access (Cisco Packet Tracer)
 
 ## Project Overview
 
-This repository presents a detailed departmental Local Area Network (LAN) design, built and simulated using **Cisco Packet Tracer**. The project focuses on creating a segmented network for an office with distinct departments (e.g., Accounting, Delivery), emphasizing structured IP addressing and inter-departmental routing.
+This repository presents a detailed departmental Local Area Network (LAN) design, built and simulated using **Cisco Packet Tracer**. The project focuses on creating a segmented network for an office with distinct departments (e.g., Accounting, Delivery), emphasizing structured IP addressing, inter-departmental routing, and secure remote management.
 
 Key aspects of this project include:
 
-* **Departmental Segmentation:** Designing separate logical networks for different departments using distinct IP subnets.
+* **Departmental Segmentation:** Designing separate logical networks for different departments using distinct IP subnets for enhanced organization and security.
 * **Comprehensive IP Addressing:** Explicitly assigning and documenting static IP addresses, subnet masks, and default gateways for every device (PCs, Printers, Router interfaces).
-* **Router-Based Inter-Departmental Routing:** Configuring a central router to enable seamless communication between the segmented departments.
+* **Router-Based Inter-Departmental Routing:** Configuring a central router to enable seamless and efficient communication between the segmented departments.
+* **Secure Remote Management (SSH):** Implementing and verifying Secure Shell (SSH) for encrypted command-line access to the router, demonstrating best practices for network device administration with a 1024-bit RSA key and custom domain.
+* **Basic Remote Management (Telnet):** Configuring Telnet access for basic, unencrypted remote command-line management of the router (primarily for demonstration/comparison purposes).
 * **Device Integration:** Incorporating various end devices, including PCs and network printers, within their respective departmental segments.
-* **Clear Documentation:** Visualizing the network structure with clear labels for departments, IP schemes, and device roles.
+* **Clear Documentation:** Visualizing the network structure with clear labels for departments, IP schemes, and device roles within the Packet Tracer environment.
 
-This project demonstrates practical skills in network planning, precise IP addressing, and the implementation of departmental network segregation.
+This project demonstrates practical skills in network planning, precise IP addressing, the implementation of departmental network segregation, and the configuration of essential remote access protocols.
 
 ## Network Topology & IP Scheme
 
@@ -42,16 +44,27 @@ The network features a central router acting as the backbone for communication b
     * PC-PT: 192.168.40.131
     * PC-PT: 192.168.40.132
 
-## Files in this Repository
+## Configuration Highlights
 
-* `departmental_office_LAN.pkt`: The Cisco Packet Tracer file with the full network design and configurations.
-* `network.png`: A detailed screenshot of the network topology with IP addressing information.
+### Router Remote Access Configuration (Partial Example)
 
-## How to Use
-
-1.  Download and install **Cisco Packet Tracer** (version 8.2.2 or higher recommended).
-2.  Clone this repository: `git clone [YourRepoURL]`
-3.  Open `departmental_office_LAN.pkt` in Cisco Packet Tracer.
-4.  Explore the configurations and verify inter-departmental communication.
-
----
+```cli
+! Global configuration for SSH
+hostname Router
+ip domain name mydomain.com
+crypto key generate rsa modulus 1024
+username admin password Zxcvb1
+!
+! VTY line configuration for remote access
+line vty 0 4
+ password Zxcvb12  ! Password for Telnet access
+ login local       ! Use local username database (for SSH and fallback for Telnet if transport input all)
+ transport input ssh telnet ! Allows both SSH and Telnet connections
+!
+! Interface configurations (as described in Network Topology section)
+interface GigabitEthernet0/0
+ ip address 192.168.40.1 255.255.255.128
+ no shutdown
+interface GigabitEthernet0/1
+ ip address 192.168.40.129 255.255.255.128
+ no shutdown
